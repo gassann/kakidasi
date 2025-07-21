@@ -225,6 +225,7 @@ const QuizPage: React.FC = () => {
                     onClick={() => handleAnswerSelect(option)}
                     onTouchEnd={(e) => e.currentTarget.blur()}
                     disabled={selectedAnswer !== null}
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
                     className={`w-full py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center min-h-[36px] focus:outline-none ${
                       selectedAnswer === null 
                         ? 'bg-white hover:bg-[#e0d9c5] text-[#2d2d2d]' 
@@ -234,7 +235,7 @@ const QuizPage: React.FC = () => {
                             : 'bg-red-100 border-2 border-red-500 text-red-800'
                           : option === currentQuestion.correctAnswer && showFeedback
                             ? 'bg-green-100 border-2 border-green-500 text-green-800'
-                            : 'bg-white text-[#2d2d2d] opacity-70'
+                            : 'bg-white text-[#2d2d2d]'
                     } shadow-md`}
                   >
                     {option}
