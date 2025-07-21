@@ -99,7 +99,8 @@ const QuizPage: React.FC = () => {
     } else {
       // 全ブラウザ統一: setInterval方式
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      const interval = isMobile ? 80 : 150;
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      const interval = isMobile ? 80 : isSafari ? 100 : 150;
       
       const timer = setInterval(() => {
         setDisplayedCharacters(prev => {
