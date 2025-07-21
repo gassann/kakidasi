@@ -159,14 +159,16 @@ const QuizPage: React.FC = () => {
     
     setTimeout(() => {
       if (currentQuestionIndex < questions.length - 1) {
-        // Move to next question
-        setCurrentQuestionIndex(prev => prev + 1);
-        setDisplayedCharacters(0);
-        setSelectedAnswer(null);
+        // Move to next question - force state reset
         setShowFeedback(false);
+        setSelectedAnswer(null);
+        setDisplayedCharacters(0);
         setIsRevealing(true);
-        // Reset animation timer for next question
         startTimeRef.current = null;
+        // Delay to ensure clean state before moving to next question
+        setTimeout(() => {
+          setCurrentQuestionIndex(prev => prev + 1);
+        }, 100);
       } else {
         // Quiz completed - navigate to results
         navigate('/results', { 
