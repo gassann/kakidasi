@@ -74,22 +74,45 @@ const QuizPage: React.FC = () => {
     }
 
     const targetLength = Math.min(currentQuestion.text.length, maxDisplayLength);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     
-    // Use simple setInterval for smoother mobile performance
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const interval = isMobile ? 80 : 150; // モバイルでは80ms、PCでは150ms
-    
-    const timer = setInterval(() => {
-      setDisplayedCharacters(prev => {
-        if (prev >= targetLength) {
-          clearInterval(timer);
-          return prev;
+    if (isIOS) {
+      // iOS用: requestAnimationFrameベースの滑らかなアニメーション
+      let startTime: number | null = null;
+      const duration = targetLength * 60; // 60ms per character
+      
+      const animate = (currentTime: number) => {
+        if (!startTime) startTime = currentTime;
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const currentChars = Math.floor(progress * targetLength);
+        
+        setDisplayedCharacters(currentChars);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
         }
-        return prev + 1;
-      });
-    }, interval);
-    
-    return () => clearInterval(timer);
+      };
+      
+      const animationId = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(animationId);
+    } else {
+      // 他デバイス用: setInterval
+      const isMobile = /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const interval = isMobile ? 80 : 150;
+      
+      const timer = setInterval(() => {
+        setDisplayedCharacters(prev => {
+          if (prev >= targetLength) {
+            clearInterval(timer);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, interval);
+      
+      return () => clearInterval(timer);
+    }
   }, [isRevealing, currentQuestion?.id]);
 
   const handleAnswerSelect = (answer: string) => {
