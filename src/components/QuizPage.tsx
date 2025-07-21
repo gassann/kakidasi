@@ -198,8 +198,9 @@ const QuizPage: React.FC = () => {
                   <button
                     key={`${currentQuestionIndex}-${index}`}
                     onClick={() => handleAnswerSelect(option)}
+                    onTouchEnd={(e) => e.currentTarget.blur()}
                     disabled={selectedAnswer !== null}
-                    className={`w-full py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center min-h-[36px] ${
+                    className={`w-full py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center min-h-[36px] focus:outline-none ${
                       selectedAnswer === null 
                         ? 'bg-white hover:bg-[#e0d9c5] text-[#2d2d2d]' 
                         : selectedAnswer === option
@@ -222,7 +223,7 @@ const QuizPage: React.FC = () => {
                     <p className="text-lg">
                       {selectedAnswer === currentQuestion.correctAnswer 
                         ? '正解！' 
-                        : `不正解。正解は「${currentQuestion.correctAnswer}」です。`}
+                        : '不正解'}
                     </p>
                     <p className="mt-1 text-sm">読んだ文字数: {displayedCharacters}文字</p>
                   </>
