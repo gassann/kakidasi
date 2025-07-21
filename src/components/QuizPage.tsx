@@ -98,23 +98,18 @@ const QuizPage: React.FC = () => {
       const animationId = requestAnimationFrame(animate);
       return () => cancelAnimationFrame(animationId);
     } else if (isSafari) {
-      // Safari用: setTimeout チェーン（確実な実行）
-      let currentIndex = 0;
-      let timeoutId: NodeJS.Timeout;
+      // Safari用: 他ブラウザと同じsetInterval方式を使用
+      const timer = setInterval(() => {
+        setDisplayedCharacters(prev => {
+          if (prev >= targetLength) {
+            clearInterval(timer);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, 150); // 標準の150ms間隔
       
-      const showNextChar = () => {
-        setDisplayedCharacters(currentIndex + 1);
-        currentIndex++;
-        
-        if (currentIndex < targetLength) {
-          timeoutId = setTimeout(showNextChar, 120);
-        }
-      };
-      
-      timeoutId = setTimeout(showNextChar, 120);
-      return () => {
-        if (timeoutId) clearTimeout(timeoutId);
-      };
+      return () => clearInterval(timer);
     } else {
       // 他デバイス用: setInterval
       const isMobile = /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
