@@ -100,19 +100,43 @@ const QuizPage: React.FC = () => {
       // 全ブラウザ統一: setInterval方式
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      const interval = isMobile ? 80 : isSafari ? 100 : 150;
       
-      const timer = setInterval(() => {
-        setDisplayedCharacters(prev => {
-          if (prev >= targetLength) {
-            clearInterval(timer);
-            return prev;
+      if (isSafari) {
+        // Safari専用: requestAnimationFrame + 手動タイミング制御
+        let lastTime = 0;
+        let charIndex = 0;
+        const CHAR_INTERVAL = 100; // 100ms per character
+        
+        const animate = (currentTime: number) => {
+          if (currentTime - lastTime >= CHAR_INTERVAL) {
+            charIndex++;
+            setDisplayedCharacters(Math.min(charIndex, targetLength));
+            lastTime = currentTime;
           }
-          return prev + 1;
-        });
-      }, interval);
-      
-      return () => clearInterval(timer);
+          
+          if (charIndex < targetLength) {
+            requestAnimationFrame(animate);
+          }
+        };
+        
+        const animationId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animationId);
+      } else {
+        // 他ブラウザ: setInterval
+        const interval = isMobile ? 80 : 150;
+        
+        const timer = setInterval(() => {
+          setDisplayedCharacters(prev => {
+            if (prev >= targetLength) {
+              clearInterval(timer);
+              return prev;
+            }
+            return prev + 1;
+          });
+        }, interval);
+        
+        return () => clearInterval(timer);
+      }
     }
   }, [isRevealing, currentQuestion?.id]);
 
