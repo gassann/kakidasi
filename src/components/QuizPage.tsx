@@ -75,10 +75,6 @@ const QuizPage: React.FC = () => {
 
     const targetLength = Math.min(currentQuestion.text.length, maxDisplayLength);
     
-    if (displayedCharacters >= targetLength) {
-      return;
-    }
-
     // Use simple setInterval for smoother mobile performance
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const interval = isMobile ? 80 : 150; // モバイルでは80ms、PCでは150ms
@@ -94,7 +90,7 @@ const QuizPage: React.FC = () => {
     }, interval);
     
     return () => clearInterval(timer);
-  }, [isRevealing, currentQuestion?.id, displayedCharacters]);
+  }, [isRevealing, currentQuestion?.id]);
 
   const handleAnswerSelect = (answer: string) => {
     if (selectedAnswer !== null || !currentQuestion) return;
