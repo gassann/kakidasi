@@ -223,9 +223,7 @@ const QuizPage: React.FC = () => {
                   <button
                     key={`q${currentQuestionIndex}-opt${index}-${option.substring(0,10)}`}
                     onClick={() => handleAnswerSelect(option)}
-                    onTouchStart={(e) => e.preventDefault()}
                     onTouchEnd={(e) => {
-                      e.preventDefault();
                       e.currentTarget.blur();
                     }}
                     disabled={selectedAnswer !== null}
