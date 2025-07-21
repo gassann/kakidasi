@@ -70,10 +70,6 @@ const QuizPage: React.FC = () => {
 
   useEffect(() => {
     if (!currentQuestion || !isRevealing) {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
       return;
     }
 
@@ -83,37 +79,22 @@ const QuizPage: React.FC = () => {
       return;
     }
 
-    // Milliseconds per character (mobile optimized)
+    // Use simple setInterval for smoother mobile performance
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const MS_PER_CHAR = isMobile ? 100 : 200; // モバイルでは100ms、PCでは200ms
+    const interval = isMobile ? 80 : 150; // モバイルでは80ms、PCでは150ms
     
-    const animate = (currentTime: number) => {
-      if (!startTimeRef.current) {
-        startTimeRef.current = currentTime;
-      }
-      
-      const elapsed = currentTime - startTimeRef.current;
-      const expectedChars = Math.floor(elapsed / MS_PER_CHAR);
-      const newDisplayedChars = Math.min(expectedChars, targetLength);
-      
-      if (newDisplayedChars > displayedCharacters && displayedCharacters < targetLength) {
-        setDisplayedCharacters(newDisplayedChars);
-      }
-      
-      if (displayedCharacters < targetLength) {
-        animationRef.current = requestAnimationFrame(animate);
-      }
-    };
+    const timer = setInterval(() => {
+      setDisplayedCharacters(prev => {
+        if (prev >= targetLength) {
+          clearInterval(timer);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, interval);
     
-    animationRef.current = requestAnimationFrame(animate);
-    
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
-    };
-  }, [isRevealing, currentQuestion?.id]);
+    return () => clearInterval(timer);
+  }, [isRevealing, currentQuestion?.id, displayedCharacters]);
 
   const handleAnswerSelect = (answer: string) => {
     if (selectedAnswer !== null || !currentQuestion) return;
