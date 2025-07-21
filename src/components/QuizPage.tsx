@@ -226,7 +226,7 @@ const QuizPage: React.FC = () => {
                     onTouchEnd={(e) => e.currentTarget.blur()}
                     disabled={selectedAnswer !== null}
                     style={{ WebkitTapHighlightColor: 'transparent' }}
-                    className={`w-full py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center min-h-[36px] focus:outline-none ${
+                    className={`w-full py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center min-h-[36px] focus:outline-none active:outline-none hover:outline-none focus:bg-white active:bg-white ${
                       selectedAnswer === null 
                         ? 'bg-white hover:bg-[#e0d9c5] text-[#2d2d2d]' 
                         : selectedAnswer === option
