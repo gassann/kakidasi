@@ -165,10 +165,8 @@ const QuizPage: React.FC = () => {
         setDisplayedCharacters(0);
         setIsRevealing(true);
         startTimeRef.current = null;
-        // Delay to ensure clean state before moving to next question
-        setTimeout(() => {
-          setCurrentQuestionIndex(prev => prev + 1);
-        }, 100);
+        // Immediate question transition with forced re-render
+        setCurrentQuestionIndex(prev => prev + 1);
       } else {
         // Quiz completed - navigate to results
         navigate('/results', { 
@@ -220,10 +218,10 @@ const QuizPage: React.FC = () => {
             </div>
             
             <div className="flex flex-col">
-              <div className="grid grid-cols-2 md:grid-cols-1 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-3" key={`question-${currentQuestionIndex}`}>
                 {currentOptions.map((option, index) => (
                   <button
-                    key={`${currentQuestionIndex}-${index}`}
+                    key={`q${currentQuestionIndex}-opt${index}-${option.substring(0,10)}`}
                     onClick={() => handleAnswerSelect(option)}
                     onTouchEnd={(e) => e.currentTarget.blur()}
                     disabled={selectedAnswer !== null}
