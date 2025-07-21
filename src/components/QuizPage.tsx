@@ -231,7 +231,8 @@ const QuizPage: React.FC = () => {
                     style={{ 
                       WebkitTapHighlightColor: 'transparent',
                       WebkitTouchCallout: 'none',
-                      WebkitUserSelect: 'none'
+                      WebkitUserSelect: 'none',
+                      touchAction: 'manipulation'
                     }}
                     className={`w-full py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center min-h-[36px] focus:outline-none active:outline-none hover:outline-none focus:bg-white active:bg-white ${
                       selectedAnswer === null 

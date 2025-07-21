@@ -15,6 +15,7 @@ body {
   background-color: #f5f2e9;
   color: #2d2d2d;
   line-height: 1.6;
+  touch-action: manipulation; /* モバイルクリック遅延を除去 */
 }
 
 .bg-pattern {
