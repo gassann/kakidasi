@@ -223,9 +223,18 @@ const QuizPage: React.FC = () => {
                   <button
                     key={`q${currentQuestionIndex}-opt${index}-${option.substring(0,10)}`}
                     onClick={() => handleAnswerSelect(option)}
-                    onTouchEnd={(e) => e.currentTarget.blur()}
+                    onTouchStart={(e) => e.preventDefault()}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      e.currentTarget.blur();
+                    }}
                     disabled={selectedAnswer !== null}
-                    style={{ WebkitTapHighlightColor: 'transparent' }}
+                    data-selected={selectedAnswer === option ? "true" : "false"}
+                    style={{ 
+                      WebkitTapHighlightColor: 'transparent',
+                      WebkitTouchCallout: 'none',
+                      WebkitUserSelect: 'none'
+                    }}
                     className={`w-full py-2 px-4 rounded-lg text-sm transition-all flex items-center justify-center min-h-[36px] focus:outline-none active:outline-none hover:outline-none focus:bg-white active:bg-white ${
                       selectedAnswer === null 
                         ? 'bg-white hover:bg-[#e0d9c5] text-[#2d2d2d]' 
