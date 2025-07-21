@@ -75,7 +75,6 @@ const QuizPage: React.FC = () => {
 
     const targetLength = Math.min(currentQuestion.text.length, maxDisplayLength);
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) && !isIOS;
     
     if (isIOS) {
       // iOS用: requestAnimationFrameベースの滑らかなアニメーション
@@ -97,22 +96,9 @@ const QuizPage: React.FC = () => {
       
       const animationId = requestAnimationFrame(animate);
       return () => cancelAnimationFrame(animationId);
-    } else if (isSafari) {
-      // Safari用: 他ブラウザと同じsetInterval方式を使用
-      const timer = setInterval(() => {
-        setDisplayedCharacters(prev => {
-          if (prev >= targetLength) {
-            clearInterval(timer);
-            return prev;
-          }
-          return prev + 1;
-        });
-      }, 150); // 標準の150ms間隔
-      
-      return () => clearInterval(timer);
     } else {
-      // 他デバイス用: setInterval
-      const isMobile = /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      // 全ブラウザ統一: setInterval方式
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       const interval = isMobile ? 80 : 150;
       
       const timer = setInterval(() => {
