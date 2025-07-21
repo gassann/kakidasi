@@ -83,8 +83,9 @@ const QuizPage: React.FC = () => {
       return;
     }
 
-    // Milliseconds per character (slower control)
-    const MS_PER_CHAR = 200; // 200ms = 0.2秒に1文字
+    // Milliseconds per character (mobile optimized)
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const MS_PER_CHAR = isMobile ? 350 : 200; // モバイルでは350ms、PCでは200ms
     
     const animate = (currentTime: number) => {
       if (!startTimeRef.current) {
