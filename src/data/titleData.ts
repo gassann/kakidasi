@@ -1,14 +1,6 @@
 import titlesData from './titles.json';
 
-interface Title {
-  title: string;
-  description: string;
-}
 
-interface TitleGroup {
-  score: number;
-  titles: Title[];
-}
 
 export interface LiteraryTitle {
   title: string;

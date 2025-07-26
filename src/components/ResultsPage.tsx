@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen } from 'lucide-react';
 import { getLiteraryTitle } from '../data/titleData';
 
